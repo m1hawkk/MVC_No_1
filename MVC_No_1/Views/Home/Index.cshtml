@@ -1,0 +1,81 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        height: 100%;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+        padding: 40px 20px 100px; /* Thêm padding-bottom để không đè lên footer */
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        min-height: 80vh;
+        align-content: start;
+    }
+
+    .grid-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 15px;
+        font-weight: bold;
+        border: 2px solid #007bff;
+        border-radius: 16px;
+        background-color: #f8f9fa;
+        color: #007bff;
+        text-decoration: none;
+        padding: 30px;
+        transition: all 0.3s ease;
+        min-height: 150px;
+    }
+
+        .grid-button:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .grid-button i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+</style>
+
+<div class="grid-container">
+    <a href="/Task1" class="grid-button">
+        <i class="fas fa-user-cog"></i>
+        OA
+    </a>
+    <a href="/Task2" class="grid-button">
+        <i class="fas fa-database"></i>
+        ERP
+    </a>
+    <a href="/Task3" class="grid-button">
+        <i class="fas fa-chart-line"></i>
+        QMS
+    </a>
+    <a href="/Task4" class="grid-button">
+        <i class="fas fa-cogs"></i>
+        VM
+    </a>
+    <a asp-controller="Manager" asp-action="Index2" class="grid-button">
+        <i class="fas fa-users"></i>
+        Emloyees Manager
+    </a>
+    <a href="https://10.18.1.7/accounts/login/?next=/iclock/imanager" class="grid-button">
+        <i class="fas fa-cogs"></i>
+        E-ZKEco
+    </a>
+</div>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
