@@ -1,0 +1,151 @@
+﻿@{
+    ViewData["Title"] = "Biểu đồ thống kê";
+}
+
+<h2 class="text-center mb-4">Các Biểu Đồ Thống Kê</h2>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                Biểu Đồ Doanh Số Hàng Tháng (Biểu đồ cột)
+            </div>
+            <div class="card-body">
+                <canvas id="monthlySalesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                Tỷ Lệ Danh Mục Sản Phẩm (Biểu đồ tròn)
+            </div>
+            <div class="card-body">
+                <canvas id="productCategoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Lấy dữ liệu từ ViewData đã truyền từ Controller
+            var salesData = @Html.Raw(Json.Serialize(ViewData["SalesData"]));
+            var productCategories = @Html.Raw(Json.Serialize(ViewData["ProductCategories"]));
+
+            // --- Biểu đồ cột: Doanh số hàng tháng ---
+            var salesLabels = salesData.map(item => item.Month);
+            var salesValues = salesData.map(item => item.Sales);
+
+            var ctxSales = document.getElementById('monthlySalesChart').getContext('2d');
+            var monthlySalesChart = new Chart(ctxSales, {
+                type: 'bar', // Loại biểu đồ: cột
+                data: {
+                    labels: salesLabels,
+                    datasets: [{
+                        label: 'Doanh số',
+                        data: salesValues,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Quan trọng để biểu đồ co giãn tốt
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Doanh số (Triệu VNĐ)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tháng'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Doanh số bán hàng 6 tháng đầu năm'
+                        }
+                    }
+                }
+            });
+
+            // --- Biểu đồ tròn: Tỷ lệ danh mục sản phẩm ---
+            var categoryLabels = productCategories.map(item => item.Category);
+            var categoryValues = productCategories.map(item => item.Value);
+
+            var ctxCategory = document.getElementById('productCategoryChart').getContext('2d');
+            var productCategoryChart = new Chart(ctxCategory, {
+                type: 'pie',
+                data: {
+                    labels: categoryLabels,
+                    datasets: [{
+                        label: 'Tỷ lệ (%)',
+                        data: categoryValues,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Quan trọng để biểu đồ co giãn tốt
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Cơ cấu danh mục sản phẩm'
+                        },
+                        tooltip: { // Hiển thị tooltip dạng %
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

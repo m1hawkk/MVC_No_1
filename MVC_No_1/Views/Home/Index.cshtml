@@ -14,8 +14,7 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 24px;
-        padding: 40px 20px 100px; /* Thêm padding-bottom để không đè lên footer */
-        width: 100%;
+        padding: 40px 20px 100px; 
         max-width: 1200px;
         margin: 0 auto;
         min-height: 80vh;
@@ -59,21 +58,26 @@
         <i class="fas fa-database"></i>
         ERP
     </a>
-    <a href="/Task3" class="grid-button">
+   @*  <a href="/Task3" class="grid-button">
         <i class="fas fa-chart-line"></i>
         QMS
-    </a>
-    <a href="/Task4" class="grid-button">
+    </a> *@
+    <a href="https://developer.microsoft.com/en-us/windows/downloads/virtual-machines/" class="grid-button">
         <i class="fas fa-cogs"></i>
         VM
     </a>
-    <a asp-controller="Manager" asp-action="Index2" class="grid-button">
+    <a asp-controller="Account" asp-action="Login" class="grid-button">
         <i class="fas fa-users"></i>
         Emloyees Manager
     </a>
     <a href="https://10.18.1.7/accounts/login/?next=/iclock/imanager" class="grid-button">
         <i class="fas fa-cogs"></i>
         E-ZKEco
+    </a>
+
+    <a asp-controller="Board" asp-action="Chart" class="grid-button">
+        <i class="fas fa-chart-line"></i>
+        CHART
     </a>
 </div>
 

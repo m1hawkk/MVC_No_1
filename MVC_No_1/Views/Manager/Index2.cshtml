@@ -1,44 +1,422 @@
 ﻿@model IEnumerable<MVC_No_1.Models.Employee>
 
-<h1 class="text-center">Employee Management</h1>
+@{
+    ViewData["Title"] = "Employee Management";
+}
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Add New Employee</a>
-</p>
+<style>
+    /* General body styling */
+    body {
+        background-color: #f8f9fa; /* Light grey background */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
+    /* Container for main content */
+    .custom-container {
+        max-width: 1200px; /* Max width for better readability on large screens */
+        margin: 40px auto; /* Center the container with vertical spacing */
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    }
 
-<table class="table table-bordered table-striped" id="employeeTable">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Department</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="employeeTableBody">
-        @if (Model != null && Model.Any())
-        {
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Name</td>
-                    <td>@item.Position</td>
-                    <td>@item.Department</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
-                </tr>
+    /* Header styling */
+    .page-title {
+        color: #343a40; /* Darker text for heading */
+        font-size: 2.5rem; /* Larger font size */
+        margin-bottom: 30px;
+        position: relative; /* For the underline effect */
+        padding-bottom: 10px;
+    }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #007bff; /* Primary color underline */
+            border-radius: 2px;
+        }
+
+    /* Action buttons section */
+    .action-buttons-group {
+        margin-bottom: 25px;
+        display: flex;
+        justify-content: space-between; /* Space out buttons and search */
+        align-items: center;
+        flex-wrap: wrap; /* Allow wrapping on small screens */
+    }
+
+        .action-buttons-group .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease; /* Smooth transitions for hover effects */
+        }
+
+        .action-buttons-group .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+            .action-buttons-group .btn-success:hover {
+                background-color: #218838;
+                border-color: #1e7e34;
+                transform: translateY(-2px); /* Slight lift on hover */
             }
+
+        .action-buttons-group .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            margin-left: 10px; /* Space between buttons */
         }
-        else
-        {
-            <tr>
-                <td colspan="5" class="text-center">No employee data available.</td>
-            </tr>
+
+            .action-buttons-group .btn-secondary:hover {
+                background-color: #5a6268;
+                border-color: #545b62;
+                transform: translateY(-2px);
+            }
+
+    /* Search bar styling */
+    .search-input-group {
+        width: 350px; /* Fixed width for the search bar */
+    }
+
+        .search-input-group .form-control {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border-right: none; /* Remove right border for smooth merge with button */
+            box-shadow: none; /* Remove default focus shadow */
+            transition: all 0.3s ease;
         }
-    </tbody>
-</table>
+
+            .search-input-group .form-control:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25); /* Custom focus shadow */
+            }
+
+        .search-input-group .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+            .search-input-group .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #004085;
+            }
+
+    /* Table styling */
+    .custom-table {
+        margin-top: 20px;
+        border-collapse: separate; /* Required for border-spacing */
+        border-spacing: 0 10px; /* Space between rows */
+    }
+
+        .custom-table thead th {
+            background-color: #007bff; /* Primary color for header */
+            color: #ffffff;
+            font-weight: 600;
+            padding: 15px 20px;
+            border: none; /* Remove default borders */
+            vertical-align: middle;
+        }
+
+            /* Rounded corners for table header */
+            .custom-table thead th:first-child {
+                border-top-left-radius: 8px;
+                border-bottom-left-radius: 8px;
+            }
+
+            .custom-table thead th:last-child {
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+            }
+
+        .custom-table tbody tr {
+            background-color: #ffffff;
+            border-radius: 8px; /* Rounded corners for table rows */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Soft shadow for each row */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+            .custom-table tbody tr:hover {
+                transform: translateY(-3px); /* Lift effect on hover */
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* More prominent shadow on hover */
+            }
+
+        .custom-table tbody td {
+            padding: 15px 20px;
+            vertical-align: middle;
+            border: none; /* Remove default cell borders */
+        }
+
+        /* Action buttons within table */
+        .custom-table .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            margin: 0 3px;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-table .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #343a40; /* Darker text for warning button */
+        }
+
+            .custom-table .btn-warning:hover {
+                background-color: #e0a800;
+                border-color: #d39e00;
+            }
+
+        .custom-table .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+            .custom-table .btn-danger:hover {
+                background-color: #c82333;
+                border-color: #bd2130;
+            }
+
+    .no-data-row {
+        text-align: center;
+        padding: 20px;
+        color: #6c757d;
+        font-style: italic;
+        background-color: #f2f2f2;
+        border-radius: 8px;
+        box-shadow: none; /* No shadow for this row */
+    }
+
+    /* Pagination styling */
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .pagination .page-item .page-link {
+        color: #007bff;
+        border: 1px solid #dee2e6;
+        margin: 0 3px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+    }
+
+    .pagination .page-item .page-link:hover {
+        background-color: #e9ecef;
+    }
+
+    .pagination .page-item.active .page-link:hover {
+        background-color: #0056b3;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+</style>
+
+<div class="custom-container">
+    <h1 class="page-title text-center">Employee Management</h1>
+
+    <div class="action-buttons-group">
+        <div>
+            <a asp-action="Create" class="btn btn-success">
+                <i class="fas fa-plus-circle me-2"></i> Add New Employee
+            </a>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-secondary">
+                <i class="fas fa-arrow-alt-circle-left me-2"></i> Back to Login
+            </a>
+        </div>
+        <div class="input-group search-input-group">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by name, position, department...">
+            <button class="btn btn-primary" type="button" id="searchButton">
+                <i class="fas fa-search me-1"></i> Search
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table custom-table" id="employeeTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Department</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="employeeTableBody">
+                @* Rows will be rendered by JavaScript *@
+            </tbody>
+        </table>
+        <div id="noResultsMessage" class="no-data-row" style="display: none;">
+            No employees found matching your search criteria.
+        </div>
+        <div id="noDataInitialMessage" class="no-data-row" style="display: none;">
+            No employee data available. Please add new employees to view them here.
+        </div>
+    </div>
+
+    <div class="pagination-container">
+        <ul class="pagination" id="paginationControls">
+            @* Pagination links will be rendered by JavaScript *@
+        </ul>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const itemsPerPage = 15;
+            let currentPage = 1;
+            let allEmployees = @Html.Raw(Json.Serialize(Model)); // Get all employee data from the model
+
+            // Function to render employee rows for the current page
+            function renderTableRows(employeesToDisplay) {
+                const tbody = $('#employeeTableBody');
+                tbody.empty(); // Clear existing rows
+
+                if (employeesToDisplay.length === 0) {
+                    if ($('#searchInput').val().trim() === '') {
+                        $('#noDataInitialMessage').show(); // No data at all
+                        $('#noResultsMessage').hide();
+                    } else {
+                        $('#noResultsMessage').show(); // No results for search
+                        $('#noDataInitialMessage').hide();
+                    }
+                    return;
+                } else {
+                    $('#noDataInitialMessage').hide();
+                    $('#noResultsMessage').hide();
+                }
+
+                employeesToDisplay.forEach(function (item) {
+                    const row = `
+                        <tr>
+                            <td>${item.id}</td>
+                            <td>${item.name}</td>
+                            <td>${item.position}</td>
+                            <td>${item.department}</td>
+                            <td class="text-center">
+                                <a href="/Manager/Edit/${item.id}" class="btn btn-warning btn-sm" title="Edit Employee">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a href="/Manager/Delete/${item.id}" class="btn btn-danger btn-sm" title="Delete Employee">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.append(row);
+                });
+            }
+
+            // Function to render pagination controls
+            function renderPaginationControls(totalItems) {
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                const paginationUl = $('#paginationControls');
+                paginationUl.empty(); // Clear existing controls
+
+                if (totalPages <= 1) {
+                    $('.pagination-container').hide(); // Hide pagination if only one page
+                    return;
+                } else {
+                    $('.pagination-container').show();
+                }
+
+                // Previous button
+                paginationUl.append(`
+                    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                        <a class="page-link" href="#" data-page="${currentPage - 1}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                `);
+
+                // Page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    paginationUl.append(`
+                        <li class="page-item ${currentPage === i ? 'active' : ''}">
+                            <a class="page-link" href="#" data-page="${i}">${i}</a>
+                        </li>
+                    `);
+                }
+
+                // Next button
+                paginationUl.append(`
+                    <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                        <a class="page-link" href="#" data-page="${currentPage + 1}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                `);
+
+                // Attach click event for page links
+                paginationUl.find('.page-link').on('click', function (e) {
+                    e.preventDefault();
+                    const newPage = parseInt($(this).data('page'));
+                    if (!isNaN(newPage) && newPage > 0 && newPage <= totalPages) {
+                        currentPage = newPage;
+                        applyFiltersAndPagination();
+                    }
+                });
+            }
+
+            // Function to apply search filters and then paginate
+            function applyFiltersAndPagination() {
+                const searchText = $('#searchInput').val().toLowerCase().trim();
+                let filteredEmployees = allEmployees;
+
+                if (searchText) {
+                    filteredEmployees = allEmployees.filter(employee =>
+                        employee.name.toLowerCase().includes(searchText) ||
+                        employee.position.toLowerCase().includes(searchText) ||
+                        employee.department.toLowerCase().includes(searchText)
+                    );
+                }
+
+                // Calculate the start and end index for the current page
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const employeesOnPage = filteredEmployees.slice(startIndex, endIndex);
+
+                renderTableRows(employeesOnPage);
+                renderPaginationControls(filteredEmployees.length);
+            }
+
+            // Event listener for search input (keyup)
+            $('#searchInput').on('keyup', function () {
+                currentPage = 1; // Reset to first page on new search
+                applyFiltersAndPagination();
+            });
+
+            // Event listener for search button click
+            $('#searchButton').on('click', function () {
+                currentPage = 1; // Reset to first page on new search
+                applyFiltersAndPagination();
+            });
+
+            // Initial load: render the first page
+            applyFiltersAndPagination();
+        });
+    </script>
+}

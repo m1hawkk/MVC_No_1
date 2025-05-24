@@ -53,3 +53,92 @@ body {
         transform: rotate(360deg);
     }
 }*/
+
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Chiều cao tối thiểu để căn giữa theo chiều dọc */
+    padding: 20px;
+}
+
+.login-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    padding: 30px 40px;
+    max-width: 450px; /* Chiều rộng tối đa của card */
+    width: 100%;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+    .login-header h2 {
+        color: #343a40; /* Màu chữ tiêu đề */
+        font-weight: 600; /* Độ đậm của chữ */
+    }
+
+.form-group label {
+    font-weight: 500; /* Làm nhãn đậm hơn một chút */
+    margin-bottom: 8px; /* Khoảng cách giữa nhãn và input */
+}
+
+.form-control {
+    border-radius: 5px; /* Bo tròn các góc input */
+    padding: 10px 15px;
+    height: auto; /* Tự động điều chỉnh chiều cao */
+}
+
+.btn-primary-custom { /* Nút đăng nhập với màu sắc tùy chỉnh */
+    background-color: #007bff; /* Màu xanh Bootstrap mặc định */
+    border-color: #007bff;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 5px;
+    width: 100%; /* Nút đầy đủ chiều rộng */
+    margin-top: 20px;
+}
+
+    .btn-primary-custom:hover {
+        background-color: #0056b3;
+        border-color: #004d9b;
+    }
+
+.links-section {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.95em;
+}
+
+    .links-section a {
+        color: #007bff;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+        .links-section a:hover {
+            text-decoration: underline;
+        }
+
+.input-group-password {
+    position: relative;
+}
+
+    .input-group-password .toggle-password {
+        position: absolute;
+        right: 15px; /* Điều chỉnh vị trí của icon */
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6c757d; /* Màu icon */
+        z-index: 100; /* Đảm bảo icon nằm trên input */
+    }
+
+    .input-group-password .form-control {
+        padding-right: 40px; /* Đảm bảo không gian cho icon */
+    }
