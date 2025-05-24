@@ -32,17 +32,15 @@
 
     <script>
         $(document).ready(function () {
-            // Lấy dữ liệu từ ViewData đã truyền từ Controller
             var salesData = @Html.Raw(Json.Serialize(ViewData["SalesData"]));
             var productCategories = @Html.Raw(Json.Serialize(ViewData["ProductCategories"]));
 
-            // --- Biểu đồ cột: Doanh số hàng tháng ---
             var salesLabels = salesData.map(item => item.Month);
             var salesValues = salesData.map(item => item.Sales);
 
             var ctxSales = document.getElementById('monthlySalesChart').getContext('2d');
             var monthlySalesChart = new Chart(ctxSales, {
-                type: 'bar', // Loại biểu đồ: cột
+                type: 'bar',
                 data: {
                     labels: salesLabels,
                     datasets: [{
