@@ -1,4 +1,4 @@
-New ASP.NET CORE Entity Upadete 21/5/2025
+New ASP.NET CORE Entity 21/5/2025
 
 ![image](https://github.com/user-attachments/assets/40608fbc-285a-4018-8238-f169ab4c7bf6)
 
