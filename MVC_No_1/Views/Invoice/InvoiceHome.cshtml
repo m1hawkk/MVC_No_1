@@ -1,0 +1,465 @@
+﻿@model List<MVC_No_1.Models.Customer>
+@{
+    ViewData["Title"] = "Invoice Home";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0; 
+        padding: 0; 
+        background-color: #f0f2f5;
+        color: #333;
+    }
+
+    .app-header {
+        background-color: #ffffff; 
+        padding: 15px 20px; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.08); 
+        margin-bottom: 20px; 
+        width: 100%; 
+        box-sizing: border-box;
+        display: flex;
+        align-items: center; 
+      
+    }
+
+        .app-header .logo-text {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #007bff; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+    .container-fluid {
+        max-width: 1200px;
+        margin: 0 auto; 
+        padding: 20px; 
+    }
+
+    h2 {
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.2em;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        font-weight: 500;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-color: #c3e6cb;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-color: #f5c6cb;
+    }
+
+    /* Form Container */
+    .form-container {
+        background-color: #ffffff;
+        padding: 35px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px 50px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="date"] {
+            padding: 12px 15px;
+            border: 1px solid #dcdcdc;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: #fdfdfd;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+    /* Button Group */
+    .button-group {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        margin-top: 25px;
+    }
+
+    .btn-action {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+    .btn-save {
+        background-color: #28a745;
+        color: white;
+    }
+
+        .btn-save:hover {
+            background-color: #218838;
+        }
+
+    .btn-clear {
+        background-color: #6c757d;
+        color: white;
+    }
+
+        .btn-clear:hover {
+            background-color: #5a6268;
+        }
+
+    /* Data Table */
+    .table-container {
+        overflow-x: auto;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1000px;
+    }
+
+        .data-table th, .data-table td {
+            padding: 14px 18px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+            vertical-align: middle;
+        }
+
+        .data-table th {
+            background-color: #007bff;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .data-table thead tr:first-child th:first-child {
+            border-top-left-radius: 0;
+        }
+
+        .data-table thead tr:first-child th:last-child {
+            border-top-right-radius: 0;
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: #e2f0ff;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+    /* Validation Errors */
+    .field-validation-error {
+        color: #e74c3c;
+        font-size: 0.85em;
+        margin-top: 5px;
+        font-weight: 500;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .form-container {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .button-group {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-action {
+            width: 100%;
+        }
+    }
+</style>
+
+
+
+<div class="container-fluid">
+    <h2>Customer Commercial Invoice Data</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <form asp-controller="Invoice" asp-action="Save" method="post" class="form-container" id="invoiceForm">
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().CommercialInvoiceNo"></label>
+            <input asp-for="FirstOrDefault().CommercialInvoiceNo" type="text" id="txt_CIN" />
+            <span asp-validation-for="FirstOrDefault().CommercialInvoiceNo" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().VendorCode"></label>
+            <input asp-for="FirstOrDefault().VendorCode" type="text" id="txt_vendorcode" />
+            <span asp-validation-for="FirstOrDefault().VendorCode" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().ShipDate"></label>
+            <input asp-for="FirstOrDefault().ShipDate" type="date" id="dtp_shipdate" />
+            <span asp-validation-for="FirstOrDefault().ShipDate" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().Qty"></label>
+            <input asp-for="FirstOrDefault().Qty" type="number" id="txt_qty" oninput="calculateAmount()" />
+            <span asp-validation-for="FirstOrDefault().Qty" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().Forwarder"></label>
+            <input asp-for="FirstOrDefault().Forwarder" type="text" id="txt_forwarder" />
+            <span asp-validation-for="FirstOrDefault().Forwarder" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().UnitPrice"></label>
+            <input asp-for="FirstOrDefault().UnitPrice" type="number" step="0.01" id="txt_unit" oninput="calculateAmount()" />
+            <span asp-validation-for="FirstOrDefault().UnitPrice" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().BLNo"></label>
+            <input asp-for="FirstOrDefault().BLNo" type="text" id="txt_blno" />
+            <span asp-validation-for="FirstOrDefault().BLNo" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().Amount"></label>
+            <input asp-for="FirstOrDefault().Amount" type="text" id="txt_Amount" readonly />
+            <span asp-validation-for="FirstOrDefault().Amount" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().PO"></label>
+            <input asp-for="FirstOrDefault().PO" type="text" id="txt_PO" />
+            <span asp-validation-for="FirstOrDefault().PO" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().Currency"></label>
+            <input asp-for="FirstOrDefault().Currency" type="text" id="txt_currency" />
+            <span asp-validation-for="FirstOrDefault().Currency" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().Line"></label>
+            <input asp-for="FirstOrDefault().Line" type="text" id="txt_line" />
+            <span asp-validation-for="FirstOrDefault().Line" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().FinanceDate"></label>
+            <input asp-for="FirstOrDefault().FinanceDate" type="date" id="dtb_财务" />
+            <span asp-validation-for="FirstOrDefault().FinanceDate" class="field-validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().PartNo"></label>
+            <input asp-for="FirstOrDefault().PartNo" type="text" id="txt_part" />
+            <span asp-validation-for="FirstOrDefault().PartNo" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstOrDefault().CustomerName"></label>
+            <input asp-for="FirstOrDefault().CustomerName" type="text" id="txt_客户" />
+            <span asp-validation-for="FirstOrDefault().CustomerName" class="field-validation-error"></span>
+        </div>
+
+
+        <div class="button-group">
+            <button type="submit" class="btn-action btn-save">SAVE</button>
+            <button type="button" class="btn-action btn-clear" onclick="clearForm()">CLEAR</button>
+        </div>
+    </form>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Commercial Invoice No.</th>
+                    <th>Ship Date</th>
+                    <th>Forwarder</th>
+                    <th>B/L No.</th>
+                    <th>PO</th>
+                    <th>Line</th>
+                    <th>Part #</th>
+                    <th>Vendor Code</th>
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>Amount</th>
+                    <th>Currency</th>
+                    <th>Finance Date</th>
+                    <th>Customer Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var customer in Model)
+                    {
+                        <tr onclick="populateForm(this)">
+                            <td>@customer.CommercialInvoiceNo</td>
+                            <td>@customer.ShipDate.ToShortDateString()</td>
+                            <td>@customer.Forwarder</td>
+                            <td>@customer.BLNo</td>
+                            <td>@customer.PO</td>
+                            <td>@customer.Line</td>
+                            <td>@customer.PartNo</td>
+                            <td>@customer.VendorCode</td>
+                            <td>@customer.Qty</td>
+                            <td>@customer.UnitPrice.ToString("N2")</td>
+                            <td>@customer.Amount.ToString("N2")</td>
+                            <td>@customer.Currency</td>
+                            <td>@customer.FinanceDate.ToShortDateString()</td>
+                            <td>@customer.CustomerName</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="14" style="text-align: center;">No data available.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Hàm tính toán Amount
+    function calculateAmount() {
+        const qtyInput = document.getElementById('txt_qty');
+        const unitPriceInput = document.getElementById('txt_unit');
+        const amountInput = document.getElementById('txt_Amount');
+
+        const qty = parseFloat(qtyInput.value) || 0;
+        const unitPrice = parseFloat(unitPriceInput.value) || 0;
+
+        const amount = qty * unitPrice;
+        amountInput.value = amount.toFixed(2);
+    }
+
+    // Hàm xóa form
+    function clearForm() {
+        const formInputs = document.querySelectorAll('#invoiceForm input');
+
+        formInputs.forEach(input => {
+            if (input.type === 'text' || input.type === 'number' || input.type === 'date') {
+                input.value = '';
+            }
+        });
+
+        document.getElementById('txt_Amount').value = '';
+    }
+
+    // Hàm điền dữ liệu vào form khi click vào hàng trong bảng
+    function populateForm(row) {
+        const cells = row.getElementsByTagName('td');
+        document.getElementById('txt_CIN').value = cells[0].innerText;
+
+        try {
+            document.getElementById('dtp_shipdate').value = new Date(cells[1].innerText).toISOString().substring(0, 10);
+        } catch (e) {
+            document.getElementById('dtp_shipdate').value = '';
+        }
+
+        document.getElementById('txt_forwarder').value = cells[2].innerText;
+        document.getElementById('txt_blno').value = cells[3].innerText;
+        document.getElementById('txt_PO').value = cells[4].innerText;
+        document.getElementById('txt_line').value = cells[5].innerText;
+        document.getElementById('txt_part').value = cells[6].innerText;
+        document.getElementById('txt_vendorcode').value = cells[7].innerText;
+        document.getElementById('txt_qty').value = cells[8].innerText;
+
+        document.getElementById('txt_unit').value = cells[9].innerText.replace(/,/g, '');
+        document.getElementById('txt_Amount').value = cells[10].innerText.replace(/,/g, '');
+        document.getElementById('txt_currency').value = cells[11].innerText;
+
+        try {
+            document.getElementById('dtb_财务').value = new Date(cells[12].innerText).toISOString().substring(0, 10);
+        } catch (e) {
+            document.getElementById('dtb_财务').value = '';
+        }
+
+        document.getElementById('txt_客户').value = cells[13].innerText;
+
+        calculateAmount();
+    }
+
+    // Thêm hiệu ứng focus vào input fields khi trang tải
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('.form-container input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#007bff';
+                this.style.boxShadow = '0 0 0 0.2rem rgba(0, 123, 255, 0.25)';
+            });
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#dcdcdc';
+                this.style.boxShadow = 'none';
+            });
+        });
+    });
+</script>

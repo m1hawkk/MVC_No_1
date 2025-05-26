@@ -1,11 +1,9 @@
 ﻿@model MVC_No_1.Models.LoginViewModel
 
 @{
-    ViewData["Title"] = "Login"; 
-    Layout = "_Layout"; 
+    Layout = "~/Views/Shared/_LoginLayout.cshtml"; // Đường dẫn đến Layout mới
+    ViewData["Title"] = "Login"; // Tiêu đề riêng cho trang Login
 }
-
-
 
 <div class="login-container">
     <div class="login-card">

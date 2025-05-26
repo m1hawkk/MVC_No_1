@@ -1,149 +1,111 @@
-﻿@{
-    ViewData["Title"] = "Biểu đồ thống kê";
-}
+﻿<style>
+    .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-<h2 class="text-center mb-4">Các Biểu Đồ Thống Kê</h2>
+    .chart-box {
+        background: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-<div class="row">
-    <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                Biểu Đồ Doanh Số Hàng Tháng (Biểu đồ cột)
-            </div>
-            <div class="card-body">
-                <canvas id="monthlySalesChart"></canvas>
-            </div>
-        </div>
+        .chart-box canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+    h3 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="chart-grid">
+    <div class="chart-box">
+        <h3>COLUMN CHART</h3>
+        <canvas id="barChart"></canvas>
     </div>
-    <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header bg-success text-white">
-                Tỷ Lệ Danh Mục Sản Phẩm (Biểu đồ tròn)
-            </div>
-            <div class="card-body">
-                <canvas id="productCategoryChart"></canvas>
-            </div>
-        </div>
+    <div class="chart-box">
+        <h3>PIE CHART</h3>
+        <canvas id="pieChart"></canvas>
+    </div>
+    <div class="chart-box" style="grid-column: span 2;">
+        <h3>LINE CHART</h3>
+        <canvas id="lineChart"></canvas>
     </div>
 </div>
 
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'];
+    const dataValues = [12, 19, 3, 5, 2, 3];
 
-    <script>
-        $(document).ready(function () {
-            var salesData = @Html.Raw(Json.Serialize(ViewData["SalesData"]));
-            var productCategories = @Html.Raw(Json.Serialize(ViewData["ProductCategories"]));
+    new Chart(document.getElementById('barChart'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: '# of Votes',
+          data: dataValues,
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
 
-            var salesLabels = salesData.map(item => item.Month);
-            var salesValues = salesData.map(item => item.Sales);
+    new Chart(document.getElementById('pieChart'), {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: dataValues,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(153, 102, 255, 0.6)',
+            'rgba(255, 159, 64, 0.6)'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
 
-            var ctxSales = document.getElementById('monthlySalesChart').getContext('2d');
-            var monthlySalesChart = new Chart(ctxSales, {
-                type: 'bar',
-                data: {
-                    labels: salesLabels,
-                    datasets: [{
-                        label: 'Doanh số',
-                        data: salesValues,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.6)',
-                            'rgba(54, 162, 235, 0.6)',
-                            'rgba(255, 206, 86, 0.6)',
-                            'rgba(75, 192, 192, 0.6)',
-                            'rgba(153, 102, 255, 0.6)',
-                            'rgba(255, 159, 64, 0.6)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false, // Quan trọng để biểu đồ co giãn tốt
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Doanh số (Triệu VNĐ)'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Tháng'
-                            }
-                        }
-                    },
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Doanh số bán hàng 6 tháng đầu năm'
-                        }
-                    }
-                }
-            });
-
-            // --- Biểu đồ tròn: Tỷ lệ danh mục sản phẩm ---
-            var categoryLabels = productCategories.map(item => item.Category);
-            var categoryValues = productCategories.map(item => item.Value);
-
-            var ctxCategory = document.getElementById('productCategoryChart').getContext('2d');
-            var productCategoryChart = new Chart(ctxCategory, {
-                type: 'pie',
-                data: {
-                    labels: categoryLabels,
-                    datasets: [{
-                        label: 'Tỷ lệ (%)',
-                        data: categoryValues,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.8)',
-                            'rgba(54, 162, 235, 0.8)',
-                            'rgba(255, 206, 86, 0.8)',
-                            'rgba(75, 192, 192, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false, // Quan trọng để biểu đồ co giãn tốt
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Cơ cấu danh mục sản phẩm'
-                        },
-                        tooltip: { // Hiển thị tooltip dạng %
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += context.parsed + '%';
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-}
+    new Chart(document.getElementById('lineChart'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: '# of Votes',
+          data: dataValues,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+</script>

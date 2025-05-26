@@ -19,7 +19,7 @@ public class AccountController : Controller
             if (model.Username == "test" && model.Password == "123")
             {
 
-                return RedirectToAction("Index2", "Manager"); 
+                return RedirectToAction("Index", "Home"); 
             }
             else
             {

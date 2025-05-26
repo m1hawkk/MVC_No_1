@@ -14,7 +14,7 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 24px;
-        padding: 40px 20px 100px; 
+        padding: 40px 20px 100px;
         max-width: 1200px;
         margin: 0 auto;
         min-height: 80vh;
@@ -51,35 +51,33 @@
 
 <div class="grid-container">
     <a href="/Task1" class="grid-button">
-        <i class="fas fa-user-cog"></i>
-        OA
+        <i class="fas fa-briefcase"></i> OA
     </a>
     <a href="/Task2" class="grid-button">
         <i class="fas fa-database"></i>
         ERP
     </a>
-   @*  <a href="/Task3" class="grid-button">
-        <i class="fas fa-chart-line"></i>
-        QMS
-    </a> *@
     <a href="https://developer.microsoft.com/en-us/windows/downloads/virtual-machines/" class="grid-button">
-        <i class="fas fa-cogs"></i>
-        VM
+        <i class="fas fa-server"></i> VM
     </a>
-    <a asp-controller="Account" asp-action="Login" class="grid-button">
-        <i class="fas fa-users"></i>
-        Emloyees Manager
+    <a asp-controller="Manager" asp-action="Index2" class="grid-button">
+        <i class="fas fa-user-friends"></i> Emloyees Manager
     </a>
     <a href="https://10.18.1.7/accounts/login/?next=/iclock/imanager" class="grid-button">
-        <i class="fas fa-cogs"></i>
-        E-ZKEco
+        <i class="fas fa-fingerprint"></i> E-ZKEco
+    </a>
+    <a href="https://10.18.1.4/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2f10.18.1.4%2fecp" class="grid-button">
+        <i class="fas fa-chart-line"></i>
+        OutLook Administrator
+    </a>
+    <a asp-controller="Board" asp-action="Chart" class="grid-button">
+        <i class="fas fa-chart-bar"></i> CHART
     </a>
 
-    <a asp-controller="Board" asp-action="Chart" class="grid-button">
-        <i class="fas fa-chart-line"></i>
-        CHART
+    <a asp-controller="Invoice" asp-action="InvoiceHome" class="grid-button">
+        <i class="fas fa-file-invoice-dollar"></i> INVOICE
     </a>
+
 </div>
 
-<!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
